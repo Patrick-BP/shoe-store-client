@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoe Store - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .user-menu {
+            display: flex;
+            gap: 1rem;
+        }
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+        }
+        .sidebar ul {
+            list-style-type: none;
+        }
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .dashboard-item {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Shoe Store</div>
+        <div class="user-menu">
+            <span>Menu</span>
+            <span>User</span>
+        </div>
+    </header>
+    <div class="main-container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#"><span>📊</span> Dashboard</a></li>
+                <li><a href="#"><span>🛒</span> Start Sell</a></li>
+                <li><a href="#"><span>📄</span> Order Report</a></li>
+                <li><a href="#"><span>📦</span> Product Report</a></li>
+                <li><a href="#"><span>🏢</span> Company Report</a></li>
+                <li><a href="#"><span>📁</span> Category Report</a></li>
+                <li><a href="#"><span>🚪</span> Logout</a></li>
+            </ul>
+        </nav>
+        <main class="content">
+            <h1>Shoe Store Management System Admin Dashboard</h1>
+            <div class="dashboard-grid">
+                <div class="dashboard-item">Start Sell</div>
+                <div class="dashboard-item">Order Report</div>
+                <div class="dashboard-item">Add Product</div>
+                <div class="dashboard-item">Product Report</div>
+                <div class="dashboard-item">Add Company</div>
+                <div class="dashboard-item">Company Report</div>
+                <div class="dashboard-item">Add Category</div>
+                <div class="dashboard-item">Category Report</div>
+                <div class="dashboard-item">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/login.PNG-4zkL7wIRR7ETyUrvobBdq8wZMEKJ6l.png" alt="Featured product" class="dashboard-image">
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

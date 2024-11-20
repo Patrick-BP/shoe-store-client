@@ -1,0 +1,111 @@
+.content {
+    flex: 1;
+    padding: 2rem;
+    background: #f1f5f9;
+}
+
+.dashboard-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    color: #ef4444;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 15px;
+    background-color: #e5e7eb;
+    
+}
+
+.label{
+    font-size:medium;
+    font-weight: bolder;
+    
+}
+.value{
+    font-size: small;
+    font-weight: lighter;
+    
+}
+
+.success-alert {
+    background: #dcfce7;
+    color: #166534;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    flex: 1;
+}
+
+select, input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+}
+
+.btn {
+    background: #ef4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: #1f2937;
+    color: white;
+    text-align: left;
+    padding: 0.75rem;
+}
+
+.table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.total-row {
+    font-weight: bold;
+    text-align: right;
+}
+.save{
+    background-color: rgb(4, 109, 246);
+    float: right;
+}

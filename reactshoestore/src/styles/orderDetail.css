@@ -1,0 +1,76 @@
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: #ef4444;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* padding: 0.75rem; */
+}
+
+.detail-label {
+    background: #374151;
+    color: white;
+    padding: 0.75rem;
+}
+
+.detail-value {
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.table th {
+    background: #374151;
+    color: white;
+    text-align: left;
+    padding: 0.75rem;
+}
+
+.table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+.total-cost {
+    text-align: right;
+    color: #ef4444;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.btn-print {
+    background: #ef4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
