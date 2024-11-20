@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/additem.css'
+import typeService from '../services/typeService'
+import itemService from '../services/ItemServices'
 
 export default function AddItem() {
+
+    const [types, setTypes] = useState([])
+
+    useEffect(()=>{
+        const typeList = typeService.getAllTypes();
+        setTypes(typeList)
+    },[]);
   return (
     <>
     <h1>Add New Product</h1>
@@ -9,28 +18,30 @@ export default function AddItem() {
                 <form>
                     <div className="form-grid">
                         <div className="form-group">
-                            <label for="product-type">Select Product Type</label>
+                            <label htmlFor="product-type">Select Product Type</label>
                             <select id="product-type" required>
                                 <option value="">Please Select</option>
-                                <option value="men">Men</option>
-                                <option value="women">Women</option>
-                                <option value="kids">Kids</option>
+                                {types.length > 0 && types.map(type =>{
+                                    return <option value="men">{type.name}</option>
+                                })}
+                                
+                                
                             </select>
                         </div>
                         <div className="form-group">
-                            <label for="product-code">Product Code</label>
+                            <label htmlFor="product-code">Product Code</label>
                             <input type="text" id="product-code" required />
                         </div>
                         <div className="form-group">
-                            <label for="product-title">Product Title</label>
+                            <label htmlFor="product-title">Product Title</label>
                             <input type="text" id="product-title" required />
                         </div>
                         <div className="form-group">
-                            <label for="total-stock">Total Stock</label>
+                            <label htmlFor="total-stock">Total Stock</label>
                             <input type="number" id="total-stock" required />
                         </div>
                         <div className="form-group">
-                            <label for="select-company">Select Company</label>
+                            <label htmlFor="select-company">Select Company</label>
                             <select id="select-company" required>
                                 <option value="">Please Select</option>
                                 <option value="nike">Nike</option>
@@ -39,20 +50,20 @@ export default function AddItem() {
                             </select>
                         </div>
                         <div className="form-group">
-                            <label for="cost-per-item">Cost Per Item</label>
+                            <label htmlFor="cost-per-item">Cost Per Item</label>
                             <input type="number" id="cost-per-item" required />
                         </div>
                         <div className="form-group">
-                            <label for="expiry-date">Expiry Date</label>
+                            <label htmlFor="expiry-date">Expiry Date</label>
                             <input type="date" id="expiry-date" required />
                         </div>
                         <div className="form-group">
-                            <label for="manufacture-date">Manufacture Date</label>
+                            <label htmlFor="manufacture-date">Manufacture Date</label>
                             <input type="date" id="manufacture-date" required />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label for="description">Description</label>
+                        <label htmlFor="description">Description</label>
                         <textarea id="description"></textarea>
                     </div>
                     <button type="submit" className="submit-btn">SUBMIT</button>

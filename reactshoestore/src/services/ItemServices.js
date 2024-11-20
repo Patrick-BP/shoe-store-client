@@ -6,7 +6,7 @@ axios.defaults.baseURL = "http://localhost:8000/api/shoe-item"
 const createNewItem = async (item)=>{
     try {
         const response = await axios.post('/new', item);
-        if(!response.ok) throw new Error("Failed to create item");
+        if(!response.status == 200) throw new Error("Failed to create item");
         return await response.data    
 
     } catch (error) {
@@ -17,7 +17,7 @@ const createNewItem = async (item)=>{
 const getItemById = async (itemId)=>{
     try {
         const response = await axios.get(`/${itemId}`);
-        if(!response.ok) throw new Error("Failed to fetch item by Id: ");
+        if(!response.status == 200) throw new Error("Failed to fetch item by Id: ");
         return response.data
 
     } catch (error) {
@@ -28,7 +28,7 @@ const getItemById = async (itemId)=>{
 const getAllItem = async ()=>{
     try {
         const response = await axios.get(`/all`);
-        if(!response.ok) throw new Error("Failed to fetch all items: ");
+        if(!response.status == 200) throw new Error("Failed to fetch all items: ");
         return response.data
 
     } catch (error) {

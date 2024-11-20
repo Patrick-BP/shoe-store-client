@@ -6,7 +6,7 @@ axios.defaults.baseURL = "http://localhost:8002/api/billing"
 const createNewSell = async (order)=>{
     try {
         const response = await axios.post('/new', order);
-        if(!response.ok) throw new Error("Failed to create order");
+        if(!response.status == 200) throw new Error("Failed to create order");
         return await response.data    
 
     } catch (error) {
@@ -17,7 +17,7 @@ const createNewSell = async (order)=>{
 const getBillingById = async (orderId)=>{
     try {
         const response = await axios.get(`/${orderId}`);
-        if(!response.ok) throw new Error("Failed to fetch order by Id: ");
+        if(!response.status == 200) throw new Error("Failed to fetch order by Id: ");
         return response.data
 
     } catch (error) {
@@ -28,7 +28,7 @@ const getBillingById = async (orderId)=>{
 const getAllBilling = async ()=>{
     try {
         const response = await axios.get(`/all`);
-        if(!response.ok) throw new Error("Failed to fetch all orders: ");
+        if(!response.status == 200) throw new Error("Failed to fetch all orders: ");
         return response.data
 
     } catch (error) {

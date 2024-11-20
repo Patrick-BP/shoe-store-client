@@ -11,6 +11,8 @@ import OrderDetail from './components/OrderDetail';
 import OrderReport from './components/OrderReport';
 import AddItem from './components/addItem';
 import ItemListing from './components/ItemListing';
+import AddType from './components/AddType';
+import CategoryReport from './components/CategoryReport';
 
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
       <Route path='Orderreport' element={<OrderReport/>}/>
       <Route path='additem' element={<AddItem/>}/>
       <Route path='itemlisting' element={<ItemListing/>}/>
+      <Route path='addtype' element={<AddType/>}/>
+      <Route path='category' element={<CategoryReport/>}/>
       
       
     </Route>

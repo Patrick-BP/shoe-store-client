@@ -11,7 +11,8 @@ export default function LeftNav() {
         <li><Link to="additem"><span>📦</span>Add Product</Link></li>
         <li><Link to="itemlisting"><span>📦</span> Product Report</Link></li>
         <li><Link to="#"><span>🏢</span> Company Report</Link></li>
-        <li><Link to="#"><span>📁</span> Category Report</Link></li>
+        <li><Link to="addtype"><span>📁</span> Add Category </Link></li>
+        <li><Link to="category"><span>📁</span> Category Report</Link></li>
         <li><Link to="#"><span>🚪</span> Logout</Link></li>
     </ul>
 </nav>
