@@ -2,71 +2,84 @@ import React, { useEffect, useState } from 'react'
 import '../styles/additem.css'
 import typeService from '../services/typeService'
 import itemService from '../services/ItemServices'
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AddItem() {
 
-    const [types, setTypes] = useState([])
+    const [types, setTypes] = useState([]);
+    const [newProduct, setNewProduct] = useState({item_code:"", name:"", description:"", price:null, type_id:null, quantity:""})
+
+    const fetchTypes = async ()=> await typeService.getAllTypes();
 
     useEffect(()=>{
-        const typeList = typeService.getAllTypes();
-        setTypes(typeList)
+        fetchTypes().then(response => setTypes(response))
     },[]);
+
+    const handleChanges = (e)=>{
+        const {name, value} = e.target;
+        setNewProduct(prev=> ({...prev, [name]:value}));
+    }
+    const addItem = async (e) => {
+        e.preventDefault();
+        const response = await itemService.createNewItem(newProduct);
+
+        if(response.status === 201){
+            toast(response.message, {
+               style: { backgroundColor: "green", color: "#fff" },
+             })
+             setNewProduct({item_code:"", name:"", description:"", price:null, typeId:null, quantity:""})
+       }else{
+           toast(response.message, {
+               style: { backgroundColor: "red", color: "#fff" },
+             })
+       }
+
+    }
   return (
     <>
     <h1>Add New Product</h1>
+    <ToastContainer />
             <div className="form-container">
                 <form>
                     <div className="form-grid">
                         <div className="form-group">
                             <label htmlFor="product-type">Select Product Type</label>
-                            <select id="product-type" required>
-                                <option value="">Please Select</option>
+                            <select id="product-type" name='type_id' onChange={handleChanges} required>
+                                <option >Please Select</option>
                                 {types.length > 0 && types.map(type =>{
-                                    return <option value="men">{type.name}</option>
+                                   
+                                    return <option value={type.type_id} key={type.type_id}>{type.typeName}</option>
                                 })}
                                 
                                 
                             </select>
                         </div>
+                        
                         <div className="form-group">
                             <label htmlFor="product-code">Product Code</label>
-                            <input type="text" id="product-code" required />
+                            <input type="text" id="product-code"  name='item_code' value={newProduct.item_code} onChange={handleChanges}required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="product-title">Product Title</label>
-                            <input type="text" id="product-title" required />
+                            <input type="text" id="product-title" name='name' value={newProduct.name} onChange={handleChanges}required />
                         </div>
+                        
                         <div className="form-group">
-                            <label htmlFor="total-stock">Total Stock</label>
-                            <input type="number" id="total-stock" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="select-company">Select Company</label>
-                            <select id="select-company" required>
-                                <option value="">Please Select</option>
-                                <option value="nike">Nike</option>
-                                <option value="adidas">Adidas</option>
-                                <option value="puma">Puma</option>
-                            </select>
+                            <label htmlFor="qty">Quantity</label>
+                            <input type="number" id="quantity"  name='quantity' value={newProduct.quantity} onChange={handleChanges}required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="cost-per-item">Cost Per Item</label>
-                            <input type="number" id="cost-per-item" required />
+                            <input type="number" id="cost-per-item"  name='price' value={newProduct.price} onChange={handleChanges}required />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="expiry-date">Expiry Date</label>
-                            <input type="date" id="expiry-date" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="manufacture-date">Manufacture Date</label>
-                            <input type="date" id="manufacture-date" required />
-                        </div>
+                        
+                        
                     </div>
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <textarea id="description"></textarea>
+                        <textarea id="description"  name='description' value={newProduct.description} onChange={handleChanges}></textarea>
                     </div>
-                    <button type="submit" className="submit-btn">SUBMIT</button>
+                    <button type="submit" className="submit-btn" onClick={addItem}>SUBMIT</button>
                 </form>
             </div>
     </>

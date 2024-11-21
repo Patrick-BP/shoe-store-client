@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = "http://localhost:8002/api/billing"
+const baseURL = "http://localhost:8002/api/billing"
 
 
 const createNewSell = async (order)=>{
     try {
-        const response = await axios.post('/new', order);
+        const response = await axios.post(`${baseURL}/new`, order);
         if(!response.status == 200) throw new Error("Failed to create order");
         return await response.data    
 
@@ -16,7 +16,7 @@ const createNewSell = async (order)=>{
 }
 const getBillingById = async (orderId)=>{
     try {
-        const response = await axios.get(`/${orderId}`);
+        const response = await axios.get(`${baseURL}/${orderId}`);
         if(!response.status == 200) throw new Error("Failed to fetch order by Id: ");
         return response.data
 
@@ -27,7 +27,7 @@ const getBillingById = async (orderId)=>{
 }
 const getAllBilling = async ()=>{
     try {
-        const response = await axios.get(`/all`);
+        const response = await axios.get(`${baseURL}/all`);
         if(!response.status == 200) throw new Error("Failed to fetch all orders: ");
         return response.data
 
@@ -37,8 +37,10 @@ const getAllBilling = async ()=>{
     }
 }
 
-export default {
+const api = {
     createNewSell,
     getBillingById,
     getAllBilling,
 }
+
+export default api;

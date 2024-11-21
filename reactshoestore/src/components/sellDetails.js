@@ -3,6 +3,7 @@ import '../styles/sellDetails.css'
 import { Link, useLocation } from 'react-router-dom'
 import helper from '../Helpers/helperFun'
 import itemService from '../services/ItemServices'
+import sellService from '../services/sellServices'
 
 export default function SellDetails() {
     const location = useLocation();
@@ -12,21 +13,18 @@ export default function SellDetails() {
     const [itemToAdd, SetItemToAdd] = useState({shoeId:null, quantity:null});
     const [getItem, setGetItem] = useState({})
     const [orders, setOrders] = useState([])
-
+    const [getAllItems, setGetAllItems] = useState();
+    const [message, setmessage] = useState()
+   const [isGood, setIsGood] = useState(false)
    
+    const fetctItems = async ()=> await itemService.getAllItem();
 
     useEffect(()=>{
         setOrderDetails({orderNo: helper.genCustomUuid(), oderDate: helper.getCurrentFormattedDate()});
+        fetctItems().then(response => setGetAllItems(response))
     },[]);
 
-    useEffect(()=>{
-        if(itemToAdd.shoeId){
-            const item = itemService.getItemById(itemToAdd.shoeId);
-            setGetItem(item)
-        }
-
-      console.log(getItem)
-    },[itemToAdd]);
+   
 
 const handleItemToAdd = (e)=>{
     e.preventDefault();
@@ -34,9 +32,30 @@ const handleItemToAdd = (e)=>{
     SetItemToAdd(prev => ({...prev, [name]: value}))
 
 }
-const addItemFun = ()=>{
-    console.log(itemToAdd)
+const addItemFun = async (e)=>{
+    e.preventDefault()
+    const selectedItem = getAllItems.filter(item => item.id == itemToAdd.shoeId);
+   
+    if(selectedItem[0].quantity < Number(itemToAdd.quantity) ){
+        
+        setmessage(`There are only ${selectedItem[0].quantity} Items available`)
+        setIsGood(true)
+        
+    }else{
+       
+        setGetItem(selectedItem[0]);
+        const itemm = { shoeId:selectedItem[0].id , unitPrice:selectedItem[0].price}
+       console.log({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity }) 
+        const resp = await sellService.createNewSell({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity })
+        resp.then(response => SetItemToAdd({shoeId:null, quantity:null}))
+        setmessage(`Item has been added`);
+        setIsGood(true);
+        SetItemToAdd({shoeId:null, quantity:null})
+    }
+
+   
 }
+
   return (
     <>
               <h1 className="dashboard-title">Sells Dashboard</h1>
@@ -69,16 +88,15 @@ const addItemFun = ()=>{
 
 <div className="card">
     <h2 className="card-title">Add Items into Cart</h2>
-    <div className="success-alert">
-        Item added into list
-    </div>
+    {isGood ? <div  className="success-alert">{message}</div>:<></>}
     <div className="form-row">
         <div className="form-control">
             <select name='shoeId' onChange={(e) =>handleItemToAdd(e)}>
                 <option >Please Select</option>
-                <option value={1}>shoe1</option>
-                <option value={2}>shoe2</option>
-                <option value={3}>shoe3</option>
+                {getAllItems && getAllItems.map(item => {
+                    return <option key={item.id} value={item.id}>{item.name}</option>
+                }) }
+                
             </select>
         </div>
         <div className="form-control">
