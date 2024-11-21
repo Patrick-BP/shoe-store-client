@@ -47,7 +47,7 @@ const addItemFun = async (e)=>{
         const itemm = { shoeId:selectedItem[0].id , unitPrice:selectedItem[0].price}
        console.log({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity }) 
         const resp = await sellService.createNewSell({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity })
-        resp.then(response => SetItemToAdd({shoeId:null, quantity:null}))
+        
         setmessage(`Item has been added`);
         setIsGood(true);
         SetItemToAdd({shoeId:null, quantity:null})
