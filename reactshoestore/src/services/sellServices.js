@@ -25,6 +25,18 @@ const getBillingById = async (orderId)=>{
         throw error;
     }
 }
+
+const getBillingByOrderNo = async (orderNo)=>{
+    try {
+        const response = await axios.get(`${baseURL}/order?order=${orderNo}`);
+        if(!response.status == 200) throw new Error("Failed to fetch order by orderNo: ");
+        return response.data
+
+    } catch (error) {
+        console.log("error fetching order:", error);
+        throw error;
+    }
+}
 const getAllBilling = async ()=>{
     try {
         const response = await axios.get(`${baseURL}/all`);
@@ -41,6 +53,7 @@ const api = {
     createNewSell,
     getBillingById,
     getAllBilling,
+    getBillingByOrderNo
 }
 
 export default api;

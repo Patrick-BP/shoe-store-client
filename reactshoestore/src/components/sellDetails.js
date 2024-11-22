@@ -45,17 +45,22 @@ const addItemFun = async (e)=>{
        
         setGetItem(selectedItem[0]);
         const itemm = { shoeId:selectedItem[0].id , unitPrice:selectedItem[0].price}
-       console.log({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity }) 
+        
         const resp = await sellService.createNewSell({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity })
         
         setmessage(`Item has been added`);
         setIsGood(true);
-        SetItemToAdd({shoeId:null, quantity:null})
+        SetItemToAdd({shoeId:"", quantity:""})
+        setOrders(prev => [...prev, {...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity }])
     }
 
    
 }
 
+const deleteOrder = (shoeId)=>{
+    const newArray = orders.filter(order => order.shoeId !== shoeId)
+    setOrders(newArray)
+}
   return (
     <>
               <h1 className="dashboard-title">Sells Dashboard</h1>
@@ -113,32 +118,32 @@ const addItemFun = async (e)=>{
             <tr>
                 <th>Product ID</th>
                 <th>Product Name</th>
+                <th>Total Items</th>
                 <th>Price Per Unit</th>
-                <th>Total Units</th>
                 <th>Total Cost</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
 
-            {orders.length >0 ? 
+            {orders.length >0 && 
                 orders && orders.map(item =>{
-                    return (<tr>
-                        <td>{item.id}</td>
+                    return (<tr key={item.id}>
+                        <td>{item.shoeId}</td>
                         <td>{item.name}</td>
-                        <td>{item.unitPrice}</td>
                         <td>{item.quantity}</td>
-                        <td>{item.totalCost}</td>
-                        <td>delete</td>
+                        <td>{item.unitPrice}</td>
+                        <td>{item.unitPrice * item.quantity}</td>
+                        <td><button className="action-btn delete-btn" onClick={()=>deleteOrder(item.shoeId)}>Delete</button></td>
                     </tr>)
-                })
-                :
+                })}
+                
                 <tr className="total-row">
                     <td colSpan="5">Total Amount:</td>
                     <td>0</td>
                 </tr>
 
-            }
+            
                 
 
 
