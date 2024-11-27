@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import '../styles/sellDetails.css'
 import { Link, useLocation } from 'react-router-dom'
 import helper from '../Helpers/helperFun'
-import itemService from '../services/ItemServices'
-import sellService from '../services/sellServices'
+import { fetchItems } from '../store/slices/itemsSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function SellDetails() {
+    const dispatch = useDispatch();
+    const {items} = useSelector(state => state.items)
     const location = useLocation();
     const {state} = location || {};
     const [customer, setCustomer] = useState(state);
@@ -13,15 +15,15 @@ export default function SellDetails() {
     const [itemToAdd, SetItemToAdd] = useState({shoeId:null, quantity:null});
     const [getItem, setGetItem] = useState({})
     const [orders, setOrders] = useState([])
-    const [getAllItems, setGetAllItems] = useState();
     const [message, setmessage] = useState()
    const [isGood, setIsGood] = useState(false)
    
-    const fetctItems = async ()=> await itemService.getAllItem();
+    // const fetctItems = async ()=> await itemService.getAllItem();
 
     useEffect(()=>{
+        dispatch(fetchItems());
         setOrderDetails({orderNo: helper.genCustomUuid(), oderDate: helper.getCurrentFormattedDate()});
-        fetctItems().then(response => setGetAllItems(response))
+        // fetctItems().then(response => setGetAllItems(response))
     },[]);
 
    
@@ -34,19 +36,19 @@ const handleItemToAdd = (e)=>{
 }
 const addItemFun = async (e)=>{
     e.preventDefault()
-    const selectedItem = getAllItems.filter(item => item.id == itemToAdd.shoeId);
-   
-    if(selectedItem[0].quantity < Number(itemToAdd.quantity) ){
+    const selectedItem = items.find(item => item.id === Number(itemToAdd.shoeId));
+    
+    if(selectedItem.quantity < Number(itemToAdd.quantity) ){
         
-        setmessage(`There are only ${selectedItem[0].quantity} Items available`)
+        setmessage(`There are only ${selectedItem.quantity} Items available`)
         setIsGood(true)
         
     }else{
        
-        setGetItem(selectedItem[0]);
-        const itemm = { shoeId:selectedItem[0].id , unitPrice:selectedItem[0].price}
+        setGetItem(selectedItem);
+        const itemm = { shoeId:selectedItem.id , unitPrice:selectedItem.price}
         
-        const resp = await sellService.createNewSell({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity })
+        // const resp = await sellService.createNewSell({...customer, ...orderDetails, ...itemm , quantity:itemToAdd.quantity })
         
         setmessage(`Item has been added`);
         setIsGood(true);
@@ -61,6 +63,8 @@ const deleteOrder = (shoeId)=>{
     const newArray = orders.filter(order => order.shoeId !== shoeId)
     setOrders(newArray)
 }
+
+console.log(orders)
   return (
     <>
               <h1 className="dashboard-title">Sells Dashboard</h1>
@@ -98,7 +102,7 @@ const deleteOrder = (shoeId)=>{
         <div className="form-control">
             <select name='shoeId' onChange={(e) =>handleItemToAdd(e)}>
                 <option >Please Select</option>
-                {getAllItems && getAllItems.map(item => {
+                {items && items.map(item => {
                     return <option key={item.id} value={item.id}>{item.name}</option>
                 }) }
                 

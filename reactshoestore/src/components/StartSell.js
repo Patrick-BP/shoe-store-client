@@ -1,19 +1,28 @@
 import React, { useState } from 'react'
 import '../styles/startsell.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import helper from '../Helpers/helperFun'
+
+
 export default function StartSell() {
   const navigate = useNavigate();
   const [customer, setCustomer] = useState({customerName:"", customerMobile:""});
-
+  const {formattingFoneNumbers} = helper;
 
   const changeHandle = (e) =>{
     e.preventDefault();
     const {name, value} = e.target;
-    setCustomer(prev => ({...prev, [name]:value}));
+   
+      setCustomer(prev => ({...prev, [name]:value}));
+    
   }
 
+  
+
 const startSellBtn = () =>{
-  navigate('/layout/addorders', {state:customer})
+  
+  const fortmatedFone = formattingFoneNumbers(customer.customerMobile);
+  navigate('/layout/addorders', {state:{customerName: customer.customerName, customerMobile: fortmatedFone}});
 }
 
   

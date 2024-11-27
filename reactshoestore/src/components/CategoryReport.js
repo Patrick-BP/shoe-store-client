@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/itemListing.css'
-import typeService from '../services/typeService';
 import {useNavigate} from 'react-router-dom'
+import {fetchTypes, updateType, deleteType} from '../store/slices/typesSlice'
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CategoryReport() {
-  const [types, setTypes] = useState()
+  const {types, loading, error} = useSelector(state => state.types);
   const navigate = useNavigate();
-
-  const response = async ()=> await typeService.getAllTypes();
-
+  const dispatch = useDispatch();
+ 
   useEffect(()=>{
-   response().then(data => setTypes(data));
-  },[])
+    dispatch(fetchTypes())
+  },[dispatch])
 
-const deleteType = (typeId) =>{
-   typeService.deleteType(typeId);
-  setTypes(prev=> prev.filter(type => type.type_id !== typeId))
-}
+
+
+const handleDelete = (typeId) => {
+  if (window.confirm('Are you sure you want to delete this type?')) {
+    dispatch(deleteType(typeId)).then(()=>{
+       dispatch(fetchTypes())
+    })
+   
+  }
+};
 
 const editType = (typeId) =>{
+
   navigate("/layout/addtype", {state:{typeId}})
 }
+
 
   return (
     <>
         <h1>All Products Report</h1>
+        <div className="orders-table-container">
             <table className="product-table">
                 <thead>
                     <tr>
@@ -34,6 +43,8 @@ const editType = (typeId) =>{
                         <th>Actions</th>
                     </tr>
                 </thead>
+
+                {loading? <tbody><tr><td><p>Loading...</p></td></tr></tbody>: error? <tbody><tr><td><p style={{color:"red"}}>Error: {error}</p></td></tr></tbody>:
                 <tbody>
 
                   {types && types.map(type =>{
@@ -43,16 +54,17 @@ const editType = (typeId) =>{
                         <td>{type.typeName}</td>
                         <td>{type.description}</td>
                         <td>
-                            <button className="action-btn edit-btn" onClick={()=>editType(type.type_id)}>Edit</button>
-                            <button className="action-btn delete-btn" onClick={()=>deleteType(type.type_id)}>Delete</button>
+                            <button className="action-btn " title="Edit"  onClick={()=>editType(type.type_id)}>✏️</button>
+                            <button className="action-btn " title="Delete" onClick={()=>handleDelete(type.type_id)}>🗑️</button>
                         </td>
                     </tr>
                     )
                   })}
                     
                     
-                </tbody>
+                </tbody>}
             </table>    
+           </div>
     </>
   )
 }

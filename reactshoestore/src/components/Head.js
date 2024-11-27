@@ -7,7 +7,7 @@ export default function Head() {
     <div className="top-bar">
                 <div className="menu-toggle">☰</div>
                 <div className="user-profile">
-                    👤 Kaushal Kishore
+                    👤 User Admin
                 </div>
     </div>
 </header>

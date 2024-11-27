@@ -1,46 +1,71 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/additem.css'
-import typeService from '../services/typeService'
-import itemService from '../services/ItemServices'
 import { ToastContainer, toast } from "react-toastify";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTypes } from '../store/slices/typesSlice';
+import {createItem} from '../store/slices/itemsSlice'
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 export default function AddItem() {
+    const {state} = useLocation();
+    const {types} = useSelector(state => state.types);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [newProduct, setNewProduct] = useState({item_code:"", name:"", description:"", price:"", type_id:"", quantity:""});
+    const [isEditing, setIsEditing]  = useState(false)
 
-    const [types, setTypes] = useState([]);
-    const [newProduct, setNewProduct] = useState({item_code:"", name:"", description:"", price:null, type_id:null, quantity:""})
-
-    const fetchTypes = async ()=> await typeService.getAllTypes();
 
     useEffect(()=>{
-        fetchTypes().then(response => setTypes(response))
+       dispatch(fetchTypes());
+       if(state){
+        setNewProduct(state.prod)
+        setIsEditing(true)
+       }
     },[]);
 
     const handleChanges = (e)=>{
         const {name, value} = e.target;
         setNewProduct(prev=> ({...prev, [name]:value}));
     }
-    const addItem = async (e) => {
+
+    const handleSumbit = (e)=>{
         e.preventDefault();
-        const response = await itemService.createNewItem(newProduct);
+         dispatch(createItem(newProduct)).then((response)=>{
 
-        if(response.status === 201){
-            toast(response.message, {
-               style: { backgroundColor: "green", color: "#fff" },
-             })
-             setNewProduct({item_code:"", name:"", description:"", price:null, typeId:null, quantity:""})
-       }else{
-           toast(response.message, {
-               style: { backgroundColor: "red", color: "#fff" },
-             })
-       }
+            if(response.meta.requestStatus === 'fulfilled' && isEditing){
+                toast("Product has been updated", {
+                    style: { backgroundColor: "green", color: "#fff" },
+                    autoClose: 1000,
+                   onClose : ()=> navigate('/layout/itemlisting')
+                  })
+                  
+            }
+            else if(response.meta.requestStatus === 'fulfilled'){
+                
+                toast("New Has been Added", {
+                   style: { backgroundColor: "green", color: "#fff" },
+                   autoClose: 1000,
+                  onClose : ()=> navigate('/layout/itemlisting')
+                 })
+                 setNewProduct({item_code:"", name:"", description:"", price:"", typeId:"", quantity:""})
+           }else{
+               toast("There was an error", {
+                   style: { backgroundColor: "red", color: "#fff" },
+                 })
+           }
+         });
+    }
 
+    const updateProd = (newProduct)=>{
+        console.log(newProduct)
     }
   return (
     <>
-    <h1>Add New Product</h1>
+   {isEditing? <h1>Update Product</h1>:<h1>Add New Product</h1>}
     <ToastContainer />
             <div className="form-container">
-                <form>
+                <form onSubmit={handleSumbit}>
                     <div className="form-grid">
                         <div className="form-group">
                             <label htmlFor="product-type">Select Product Type</label>
@@ -77,9 +102,10 @@ export default function AddItem() {
                     </div>
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <textarea id="description"  name='description' value={newProduct.description} onChange={handleChanges}></textarea>
+                        <textarea id="description"  name='description' value={newProduct.description} onChange={handleChanges} required></textarea>
                     </div>
-                    <button type="submit" className="submit-btn" onClick={addItem}>SUBMIT</button>
+                    {isEditing ? <button type="submit" className="submit-btn" onClick={()=>updateProd(newProduct)}>UPDATE</button>:
+                    <button type="submit" className="submit-btn">SUBMIT</button>}
                 </form>
             </div>
     </>

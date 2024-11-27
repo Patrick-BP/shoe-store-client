@@ -20,6 +20,7 @@ body {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
+    width: 267px;
 }
 .user-menu {
     display: flex;
@@ -88,14 +89,16 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.55rem 1.5rem;
-    background: white;
+    /* background: white; */
     border-bottom: 1px solid #e5e7eb;
-    width: 81.5%;
+    width: 100%;
+    color: #fff;
+    
 }
 
 .menu-toggle {
     font-size: 1.5rem;
-    color: #6b7280;
+    color: #ffffff;
     cursor: pointer;
 }
 
@@ -103,5 +106,5 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #374151;
+    color: #f8f9fa;
 }

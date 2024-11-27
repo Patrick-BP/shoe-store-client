@@ -18,8 +18,25 @@ function getCurrentFormattedDate() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
+  function formattingFoneNumbers(input){
+      console.log(input)
+    input = input.replace(/\D/g, "");
 
-  export default {
+    // Format the input as (XXX)-XXX-XXXX
+    if (input.length > 6) {
+      input = `(${input.slice(0, 3)})-${input.slice(3, 6)}-${input.slice(6, 10)}`;
+    } else if (input.length > 3) {
+      input = `(${input.slice(0, 3)})-${input.slice(3, 6)}`;
+    } else if (input.length > 0) {
+      input = `(${input}`;
+    }
+    return input
+  }
+
+
+  export default  {
     getCurrentFormattedDate,
-    genCustomUuid
+    genCustomUuid,
+    formattingFoneNumbers
+
   }
