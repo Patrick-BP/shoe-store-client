@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 const baseURL = "http://localhost:8002/api/billing"
-const baseURLShoeItem = "http://localhost:8000/api/shoe-items"
+const baseURLShoeItem = "http://localhost:8000/api/shoe-item"
 
 
 export const saveOrder = createAsyncThunk('orders/saveOrder', async(
@@ -14,8 +14,10 @@ export const saveOrder = createAsyncThunk('orders/saveOrder', async(
 
           // subtract the item quantity
           const selectedItem = getState().items.items.find(item => item.id === order.shoeId);
+          console.log("find :",selectedItem)
           if(selectedItem){
             const updateQuantity = selectedItem.quantity - order.quantity;
+            console.log(selectedItem.quantity - order.quantity)
             await axios.patch(`${baseURLShoeItem}/${order.shoeId}/stock?quantity=${updateQuantity}` )
           }
 

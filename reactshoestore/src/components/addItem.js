@@ -43,7 +43,7 @@ export default function AddItem() {
             }
             else if(response.meta.requestStatus === 'fulfilled'){
                 
-                toast("New Has been Added", {
+                toast("New Item Has been Added", {
                    style: { backgroundColor: "green", color: "#fff" },
                    autoClose: 1000,
                   onClose : ()=> navigate('/layout/itemlisting')

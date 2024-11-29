@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import '../styles/sellDetails.css';
 import { fetchItems } from '../store/slices/itemsSlice';
 import { addOrder, deleteOrder , saveOrder} from '../store/slices/orderSSlice'
 import { setMessage } from '../store/slices/messageSlice';
 import helper from '../Helpers/helperFun';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function SellDetails() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const items = useSelector((state) => state.items.items);
   const orders = useSelector((state) => state.orders.orders);
   const totalAmount = useSelector((state) => state.orders.totalAmount);
@@ -69,13 +72,29 @@ export default function SellDetails() {
   
     const handleSaveOrder = () => {
         orders.forEach((order) => {
-          dispatch(saveOrder(order)).then(resp => console.log(resp));
+          dispatch(saveOrder(order)).then(resp =>{
+            if(resp.meta.requestStatus === 'fulfilled'){
+                
+                toast("New Order Has been Added", {
+                   style: { backgroundColor: "green", color: "#fff" },
+                   autoClose: 1000,
+                  onClose : ()=> navigate('/layout/itemlisting')
+                 })
+                 
+           }else{
+               toast("There was an error", {
+                   style: { backgroundColor: "red", color: "#fff" },
+                   autoClose: 1000,
+                 })
+           }
+          });
         });
       };
   
 
   return (
     <>
+    <ToastContainer/>
       <h1 className="dashboard-title">Sells Dashboard</h1>
       <div className="card">
         <h2 className="card-title">Customer and Order Details</h2>
