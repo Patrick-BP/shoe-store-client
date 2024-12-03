@@ -62,7 +62,7 @@ export default function ItemListing() {
 
                     {items && items.map(prod => {
                         return (
-                        <tr key={prod.id}>
+                        <tr key={prod.id}  style={prod.quantity === 0 ? { color: "red" } : {}}>
                         <td>{prod.id}</td>
                         <td>{prod.item_code}</td>
                         <td>{prod.name}</td>

@@ -13,6 +13,7 @@ import AddItem from './components/addItem';
 import ItemListing from './components/ItemListing';
 import AddType from './components/AddType';
 import CategoryReport from './components/CategoryReport';
+import CompletedOrder from './components/CompletedOrder';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Route path='itemlisting' element={<ItemListing/>}/>
       <Route path='addtype' element={<AddType/>}/>
       <Route path='category' element={<CategoryReport/>}/>
+      <Route path='completedorder' element={<CompletedOrder/>}/>
       
       
     </Route>

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios'
-const baseURL = "http://localhost:8001/api/shoe-types"
+const baseURL = "http://localhost:8080/api/shoe-types"
 
 export const fetchTypes = createAsyncThunk('types/fetchTypes',async ()=>{
     const response = await axios.get(`${baseURL}`);

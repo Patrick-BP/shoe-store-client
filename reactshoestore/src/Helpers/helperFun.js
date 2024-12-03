@@ -19,7 +19,7 @@ function getCurrentFormattedDate() {
   }
 
   function formattingFoneNumbers(input){
-      console.log(input)
+      
     input = input.replace(/\D/g, "");
 
     // Format the input as (XXX)-XXX-XXXX

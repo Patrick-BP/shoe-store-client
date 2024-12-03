@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../styles/sellDetails.css';
 import { fetchItems } from '../store/slices/itemsSlice';
-import { addOrder, deleteOrder , saveOrder} from '../store/slices/orderSSlice'
+import { addOrder, clearOrders, deleteOrder , saveOrder} from '../store/slices/orderSSlice'
 import { setMessage } from '../store/slices/messageSlice';
 import helper from '../Helpers/helperFun';
 import { ToastContainer, toast } from "react-toastify";
@@ -15,7 +15,7 @@ export default function SellDetails() {
   const items = useSelector((state) => state.items.items);
   const orders = useSelector((state) => state.orders.orders);
   const totalAmount = useSelector((state) => state.orders.totalAmount);
-  const { message, isGood } = useSelector((state) => state.message);
+  const { message, isGood } = useSelector((state) => state.message );
   const location = useLocation();
   const { state: customer } = location || {};
   
@@ -25,11 +25,14 @@ export default function SellDetails() {
   });
   const [itemToAdd, setItemToAdd] = useState({ shoeId: '', quantity: '' });
 
+  const [color, setColor] = useState("green")
+
   useEffect(() => {
+    dispatch(clearOrders());
     dispatch(fetchItems());
     setOrderDetails({
       orderNo: helper.genCustomUuid(),
-    
+      
     });
   }, [dispatch]);
 
@@ -40,17 +43,57 @@ export default function SellDetails() {
 
   const addItemFun = (e) => {
     e.preventDefault();
+       // Check if an item is selected
+       if (!itemToAdd.shoeId || !itemToAdd.quantity) {
+        dispatch(
+            setMessage({
+                message: 'Please select an item and specify quantity',
+                isGood: false
+            })
+        );
+        setColor("red")
+        return;
+    }
     const selectedItem = items.find((item) => item.id === Number(itemToAdd.shoeId));
+     // More explicit check for existing item in orders
+     const existingOrderIndex = orders.findIndex(order => order.shoeId === Number(itemToAdd.shoeId));
+
     if (!selectedItem) return;
 
-    if (selectedItem.quantity < Number(itemToAdd.quantity)) {
+    if(selectedItem.quantity == 0) {
+     
+      setColor("red")
+      dispatch(
+        setMessage({
+          message: `The  items is out of stock.`,
+          isGood: true,
+        
+        })
+      );
+    
+
+    }else if (selectedItem.quantity < Number(itemToAdd.quantity)) {
+      setColor("red")
       dispatch(
         setMessage({
           message: `There are only ${selectedItem.quantity} items available.`,
-          isGood: false,
+          isGood: true,
+        
         })
       );
-    } else {
+    } else if(existingOrderIndex !== -1){
+    
+      setColor("red")
+      dispatch(
+        setMessage({
+          message: `This Item is already added`,
+          isGood: true,
+        
+        })
+      );
+      setItemToAdd({ shoeId: '', quantity: '' })
+      return;
+    }else {
       const newOrder = {
         shoeId: selectedItem.id,
         name: selectedItem.name,
@@ -59,8 +102,10 @@ export default function SellDetails() {
         ...orderDetails,
         ...customer,
       };
+     
+      setColor("green")
       dispatch(addOrder(newOrder));
-      dispatch(setMessage({ message: 'Item has been added!', isGood: true }));
+      dispatch(setMessage({ message: 'Item has been added!', isGood: true}));
       setItemToAdd({ shoeId: '', quantity: '' });
     }
   };
@@ -78,9 +123,11 @@ export default function SellDetails() {
                 toast("New Order Has been Added", {
                    style: { backgroundColor: "green", color: "#fff" },
                    autoClose: 1000,
-                  onClose : ()=> navigate('/layout/itemlisting')
+                  onClose : ()=> navigate('/layout/completedorder',{state: orderDetails})
                  })
-                 
+                
+                 dispatch(setMessage({ message:"", isGood: false}));
+                 setColor("green")
            }else{
                toast("There was an error", {
                    style: { backgroundColor: "red", color: "#fff" },
@@ -90,7 +137,6 @@ export default function SellDetails() {
           });
         });
       };
-  
 
   return (
     <>
@@ -121,7 +167,7 @@ export default function SellDetails() {
 
       <div className="card">
         <h2 className="card-title">Add Items into Cart</h2>
-        {message && <div className={`alert ${isGood ? 'success-alert' : 'error-alert'}`}>{message}</div>}
+        
         <div className="form-row">
           <div className="form-control">
             <select name="shoeId" value={itemToAdd.shoeId} onChange={handleItemToAdd}>
@@ -145,9 +191,12 @@ export default function SellDetails() {
           <button className="btn" onClick={addItemFun}>
             ADD ITEM
           </button>
+          
         </div>
-      </div>
+        {message && <div style={{color: color, fontWeight:"bolder"}}>{message}</div>}
 
+      </div>
+      
       <div className="card">
         <h2 className="card-title">Order Item Details</h2>
         <table className="table">
@@ -182,7 +231,7 @@ export default function SellDetails() {
             </tr>
           </tbody>
         </table>
-        <Link to="/layout/Orderdetail">Order Detail</Link>
+        
         <button onClick={handleSaveOrder} className="btn save">SAVE ORDER</button>
       </div>
     </>

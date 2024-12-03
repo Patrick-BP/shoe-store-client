@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 
-const baseURL = "http://localhost:8002/api/billing"
-const baseURLShoeItem = "http://localhost:8000/api/shoe-item"
+const baseURL = "http://localhost:8080/api/billing"
+const baseURLShoeItem = "http://localhost:8080/api/shoe-item"
 
 
 export const saveOrder = createAsyncThunk('orders/saveOrder', async(
@@ -14,14 +14,14 @@ export const saveOrder = createAsyncThunk('orders/saveOrder', async(
 
           // subtract the item quantity
           const selectedItem = getState().items.items.find(item => item.id === order.shoeId);
-          console.log("find :",selectedItem)
+          
           if(selectedItem){
             const updateQuantity = selectedItem.quantity - order.quantity;
-            console.log(selectedItem.quantity - order.quantity)
             await axios.patch(`${baseURLShoeItem}/${order.shoeId}/stock?quantity=${updateQuantity}` )
           }
-
-          return savedOrder;
+          
+         
+          return savedOrder.data;
 
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -61,7 +61,7 @@ const ordersSlice = createSlice({
       })
       .addCase(saveOrder.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.orders.push(action.payload);
+        
       })
       .addCase(saveOrder.rejected, (state, action) => {
         state.status = 'failed';

@@ -32,7 +32,7 @@ const editType = (typeId) =>{
 
   return (
     <>
-        <h1>All Products Report</h1>
+        <h1>Types List</h1>
         <div className="orders-table-container">
             <table className="product-table">
                 <thead>

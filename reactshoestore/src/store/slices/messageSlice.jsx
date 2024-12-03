@@ -5,15 +5,18 @@ const messageSlice = createSlice({
   initialState: {
     message: '',
     isGood: false,
+    
   },
   reducers: {
     setMessage(state, action) {
       state.message = action.payload.message;
       state.isGood = action.payload.isGood;
+      
     },
     clearMessage(state) {
       state.message = '';
       state.isGood = false;
+     
     },
   },
 });
