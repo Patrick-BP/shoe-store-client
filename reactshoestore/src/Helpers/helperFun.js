@@ -34,9 +34,11 @@ function getCurrentFormattedDate() {
   }
 
 
-  export default  {
+ const funcs= {
     getCurrentFormattedDate,
     genCustomUuid,
     formattingFoneNumbers
 
   }
+
+  export default funcs;

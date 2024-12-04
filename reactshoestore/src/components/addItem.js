@@ -22,7 +22,7 @@ export default function AddItem() {
         setNewProduct(state.prod)
         setIsEditing(true)
        }
-    },[]);
+    },[dispatch, state]);
 
     const handleChanges = (e)=>{
         const {name, value} = e.target;

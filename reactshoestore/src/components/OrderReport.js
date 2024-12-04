@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../styles/orderReport.css'
+import { useDispatch, useSelector } from 'react-redux'
+import {fetchAllOrders} from '../store/slices/orderSSlice'
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderReport() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const {allCompletedOrders, loading, error} = useSelector(state => state.orders)
+ 
+
+    useEffect(()=>{
+        dispatch(fetchAllOrders())
+    },[dispatch])
+
+
+    const viewFun = (orderNo) =>{
+        
+        navigate('/layout/completedorder',{state:orderNo})
+    }
   return (
     <>
      <h1 className="page-title">All Orders Report</h1>
@@ -18,48 +35,24 @@ export default function OrderReport() {
                 <th>Actions</th>
             </tr>
         </thead>
+        {allCompletedOrders.length === 0 && <tbody><tr><td><p>No orders Yet</p></td></tr></tbody>}
+        {loading? <tbody><tr><td><p>Loading...</p></td></tr></tbody>: error? <tbody><tr><td><p style={{color:"red"}}>Error: {error}</p></td></tr></tbody>:
         <tbody>
-            <tr>
-                <td>88</td>
-                <td>asdf</td>
-                <td>asdfasdf</td>
-                <td>581</td>
-                <td>11 Aug 2021 02:28 PM</td>
-                <td><button className="action-btn">👁️</button></td>
+            {allCompletedOrders && allCompletedOrders.map(order =>{
+                return (
+            <tr key={order.orderNo}>
+                <td>{order.orderNo}</td>
+                <td>{order.customerName}</td>
+                <td>{order.customerMobile}</td>
+                <td>${order.totalCost.toFixed(2)}</td>
+                <td>{order.orderDate}</td>
+                <td><button className="action-btn" onClick={()=>viewFun(order.orderNo)}>👁️</button></td>
             </tr>
-            <tr>
-                <td>93</td>
-                <td>Kaushal Kishore</td>
-                <td>9876543211</td>
-                <td>940</td>
-                <td>11 Aug 2021 02:30 PM</td>
-                <td><button className="action-btn">👁️</button></td>
-            </tr>
-            <tr>
-                <td>98</td>
-                <td>Amit Kumar</td>
-                <td>9878676543</td>
-                <td>34</td>
-                <td>11 Aug 2021 04:36 PM</td>
-                <td><button className="action-btn">👁️</button></td>
-            </tr>
-            <tr>
-                <td>100</td>
-                <td>Jay Kumar</td>
-                <td>8787865454</td>
-                <td>760</td>
-                <td>12 Aug 2021 12:02 AM</td>
-                <td><button className="action-btn">👁️</button></td>
-            </tr>
-            <tr>
-                <td>106</td>
-                <td>Kaushal Kishore</td>
-                <td>834573985</td>
-                <td>5000</td>
-                <td>17 Apr 2022 03:34 AM</td>
-                <td><button className="action-btn">👁️</button></td>
-            </tr>
-        </tbody>
+                )
+            })}
+            
+        
+        </tbody>}
     </table>
 </div>
 

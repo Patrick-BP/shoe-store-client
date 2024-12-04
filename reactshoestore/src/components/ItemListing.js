@@ -1,4 +1,4 @@
-import React,  { useEffect, useState } from 'react'
+import React,  { useEffect } from 'react'
 import '../styles/itemListing.css'
 import {useNavigate} from 'react-router-dom'
 import { fetchItems, deleteItem } from '../store/slices/itemsSlice';

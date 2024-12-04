@@ -24,7 +24,7 @@ export default function AddType() {
             setIsEditing(true)
             setNewType(types.find(type=> type.type_id === state.typeId))
         }
-    },[])
+    },[state, types])
 
     const handleChanges = (e) =>{
         const {name, value} = e.target;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import '../styles/itemListing.css'
 import {useNavigate} from 'react-router-dom'
-import {fetchTypes, updateType, deleteType} from '../store/slices/typesSlice'
+import {fetchTypes, deleteType} from '../store/slices/typesSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function CategoryReport() {

@@ -19,7 +19,7 @@ export const updateItem = createAsyncThunk('items/updateItem', async(item)=>{
 
 });
 export const deleteItem = createAsyncThunk('items/deleteItem', async(id)=>{
-    const response = await axios.delete(`${baseURL}/${id}`)
+     await axios.delete(`${baseURL}/${id}`)
     return id;
 
 });

@@ -5,7 +5,14 @@ import axios from 'axios';
 const baseURL = "http://localhost:8080/api/billing"
 const baseURLShoeItem = "http://localhost:8080/api/shoe-item"
 
-
+export const fetchAllOrders = createAsyncThunk('orders/fetchAllOrders', async()=>{
+  const response = await axios.get(`${baseURL}/all`);
+  return response.data;
+});
+export const fetchOrdersByOrderNo = createAsyncThunk('orders/fetchOrdersByOrderNo', async(orderNo)=>{
+  const response = await axios.get(`${baseURL}/order?order=${orderNo}`)
+  return response.data
+});
 export const saveOrder = createAsyncThunk('orders/saveOrder', async(
     order, {dispatch, getState, rejectWithValue})=>{
         try {
@@ -32,6 +39,10 @@ const ordersSlice = createSlice({
   name: 'orders',
   initialState: {
     orders: [],
+    completedOrder:[],
+    allCompletedOrders:[],
+    loading:false,
+    error: false,
     totalAmount: 0,
   },
   reducers: {
@@ -66,7 +77,48 @@ const ordersSlice = createSlice({
       .addCase(saveOrder.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
-      });
+      })
+
+      // completed order
+      .addCase(fetchOrdersByOrderNo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrdersByOrderNo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.completedOrder = action.payload
+      })
+      .addCase(fetchOrdersByOrderNo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // All completed orders
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        const orderArray = [];
+
+        action.payload.forEach(element => {
+            const findOrder = action.payload.filter(order=> order.orderNo === element.orderNo);
+            const exists = orderArray.map(item => item.orderNo).includes(element.orderNo);
+       
+            if(!exists){
+                const totalSum = findOrder.reduce((acc, curr)=> acc + curr.total , 0);
+                orderArray.push({orderNo: findOrder[0].orderNo ,customerName: findOrder[0].customerName, customerMobile:findOrder[0].customerMobile , totalCost:totalSum, orderDate:findOrder[0].orderDate})
+            }
+        });
+    
+
+        state.allCompletedOrders = orderArray
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      
   },
 });
 

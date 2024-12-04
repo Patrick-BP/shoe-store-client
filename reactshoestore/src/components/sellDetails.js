@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../styles/sellDetails.css';
@@ -15,7 +15,7 @@ export default function SellDetails() {
   const items = useSelector((state) => state.items.items);
   const orders = useSelector((state) => state.orders.orders);
   const totalAmount = useSelector((state) => state.orders.totalAmount);
-  const { message, isGood } = useSelector((state) => state.message );
+  const { message } = useSelector((state) => state.message );
   const location = useLocation();
   const { state: customer } = location || {};
   
@@ -60,7 +60,7 @@ export default function SellDetails() {
 
     if (!selectedItem) return;
 
-    if(selectedItem.quantity == 0) {
+    if(selectedItem.quantity === 0) {
      
       setColor("red")
       dispatch(
@@ -123,7 +123,7 @@ export default function SellDetails() {
                 toast("New Order Has been Added", {
                    style: { backgroundColor: "green", color: "#fff" },
                    autoClose: 1000,
-                  onClose : ()=> navigate('/layout/completedorder',{state: orderDetails})
+                  onClose : ()=> navigate('/layout/completedorder',{state: orderDetails.orderNo})
                  })
                 
                  dispatch(setMessage({ message:"", isGood: false}));
